@@ -491,6 +491,129 @@ Our framework allows refinement across multiple levels. We can think of that as 
 
 The composition of multiple single-level refinement steps also implies that the configurations from above apply and we do not get any additional problematic cases. For example, for the case of a single shared vertex, the ``severity'' of the cohomological mismatch increases.
 
+\section{Formalising the Proof}
+
+Starting from Lemma~\ref{lemma:isomorphism_on_cohomology}, we need to quantify the spaces $X_{\l,\l+1}$ and $X_{\l+1, \l+1}$ precisely.
+
+\begin{definition}
+    The spaces $X_{\l,\l+1}$ and $X_{\l+1, \l+1}$ are the spaces that are removed at level $\l$ through patches on level $\l+1$ and inserted on level $\l+1$ in their place. Given a subdivision partition $\C = \bigcup_{\l = \lzero}^L \calP_\l$, they are defined as
+    \begin{equation}
+    \begin{aligned}
+        X^k_{\l,\l+1} &\coloneqq \mathrm{span} \Big( \bigcup_{\simplex{k}{\l}{\coarseIdxone} \in \mathring{\K}^k ( \C_{\leq \l \to \l} )} \; \constrQ{\SDFbasis}{k}{\l}{\L}{\coarseIdxone} \Big), \\
+        X^k_{\l+1,\l+1} &\coloneqq 
+    \end{aligned}
+    \end{equation}
+    where $\C_{\leq \l \to \l} \coloneqq \mathcal{A}_{\C_{\leq \l \to \l}} \C_{\leq \l}$.
+\end{definition}
+
+To make precise statements about the change in cohomology, we are going to look at the cohomology of the removed spaces $X^k_{\l, \l+1}$ first.
+
+The following lemma establish the cohomology of simply vertex-connected spaces.
+
+\begin{definition}
+    The spaces $\SDFspace{k}{\vertex{\l}{\coarseIdxone}}{\L}$ of a vertex star sequence $\SDFspace{\dotfill}{\vertex{\l}{\coarseIdxone}}{\L}$ associated to the vertex $\vertex{\l}{\coarseIdxone}$ is defined as
+    \begin{equation}
+    \begin{aligned}
+        \SDFspace{0}{\vertex{\l}{\coarseIdxone}}{\L} &= \mathrm{span} \Big( \constrQ{\SDFbasis}{0}{\l}{\L}{\coarseIdxone} \Big) \\
+        \SDFspace{1}{\vertex{\l}{\coarseIdxone}}{\L} &= \mathrm{span} \Big( \bigcup\limits_{\edge{\l}{\coarseIdxtwo} \in \EVl{\l} (\vertex{\l}{\coarseIdxone})} \constrQ{\SDFbasis}{1}{\l}{\L}{\coarseIdxtwo} \Big) \\
+        \SDFspace{2}{\vertex{\l}{\coarseIdxone}}{\L} &= \mathrm{span} \Big( \bigcup\limits_{\face{\l}{\fineIdxone} \in \FVl{\l} (\vertex{\l}{\coarseIdxone})} \constrQ{\SDFbasis}{2}{\l}{\L}{\fineIdxone} \Big)
+    \end{aligned}
+    \end{equation}
+\end{definition}
+
+\begin{lemma}
+    For non-boundary vertices $\vertex{\l}{\coarseIdxone}$, the vertex star sequence is part of the exact sequence
+    \begin{equation}
+    \begin{tikzcd}
+        \mathfrak{V}_\coarseIdxone: \quad 0 \arrow[r] & \SDFspace{0}{\vertex{\l}{\coarseIdxone}}{\L} \arrow[r, "\extd"] & \SDFspace{1}{\vertex{\l}{\coarseIdxone}}{\L} \arrow[r, "\extd"] & \SDFspace{2}{\vertex{\l}{\coarseIdxone}}{\L} \arrow[r, "\int"] & \mathbb{R} \arrow[r] & 0.
+    \end{tikzcd}
+    \end{equation}
+\end{lemma}
+
+\begin{corollary}
+    The vertex star sequence of a non-boundary vertex $\vertex{\l}{\coarseIdxone}$ has an Euler characteristic of $\chi = \mathrm{dim}(\mathbb{R}) = 1$.
+\end{corollary}
+
+\begin{definition}
+    A space is vertex-connected if it can be build incrementally by adding a vertex star space associated to a vertex of an edge of the space.
+\end{definition}
+
+With this notion of vertex-connectedness, we can now construct patch spaces incrementally through adding vertex star spaces/sequences.
+
+\begin{lemma}
+    The (connected) patch spaces are equivalent to the union of vertex star spaces of the patch's vertices, i.e.
+    \begin{equation}
+        \SDFspace{k}{\calP_\l}{\L} = \bigcup\limits_{\vertex{\l}{\coarseIdxone} \in \V(\calP_\l)} \SDFspace{k}{\vertex{\l}{\coarseIdxone}}{\L}.
+    \end{equation}
+\end{lemma}
+\begin{proof}
+    
+\end{proof}
+
+Under certain conditions (exact subdiv partition for instance), we can guarantee that the cohomology of the patch spaces matches that of the patch itself.
+
+\begin{lemma}
+    For a patch $\calP_\l$ with no boundary vertices, i.e. $\calP_\l \cap \partial \T_\l = \varnothing$, the patch spaces satisfy
+    \begin{equation}
+        \mathcal{H}^k \big( \SDFspace{k}{\calP_\l}{\L}\big) = \mathcal{H}^k_\mathrm{rel} \big( \calP_\l \big)
+    \end{equation}
+\end{lemma}
+\begin{proof}
+    The proof uses a Mayer-Vietoris sequence to relate the patch spaces to the sum and overlap spaces, and analyses the cohomology of the overlap spaces to show that the cohomology of $\calP_\l$ is exactly reproduced by its associated patch spaces.
+\end{proof}
+
+We can extend the result above bby incorporating boundary contributions in the following way.
+
+\begin{lemma}
+    The spaces $X^k_{\l, \l+1}$ for an individual patch $\calP_{\l+1}$ have the Euler characteristic $\chi = 1 - n$, where $n$ is the number of vertex-connected components of $\calP_{\l+1} \cap \T_{\L+1}$.
+\end{lemma}
+\begin{proof}
+    We can decompose the space into the part with vanishing trace and the boundary part. The part with vanishing trace has an Euler characteristic of $1$. Every connected component of the boundary part with $m$ vertices has $m+1$ edges, and thus decreases the Euler characteristic by $1$. Recombining the different parts shows that the overall Euler characteristic is $1-n$.
+\end{proof}
+
+This implies that the cohomology of the spaces $X^k_{\l, \l+1}$ is precisely controlled by the cohomology of the patches and some boundary contributions. The goal now is to show that the refined spaces $X^k_{\l+1, \l+1}$ possess the same cohomology under the condition of an exact subdivision partition. For that, we need to consider four cases in particular:
+
+\begin{itemize}
+    \item What happens when two patches overlap (partially)?
+    \item What happens when a patch is not simply connected, i.e. it does not have trivial topology?
+    \item What happens close to the boundary?
+    \item What happens for multi-level gaps between patches?
+\end{itemize}
+
+In all of these cases, we need to understand whether we ever produce a mismatch in cohomology. Since we already established that the differential complex and linear independence are guaranteed for any exact subdivision partition, it suffices to keep track only of the Euler characteristic.
+
+\begin{lemma}
+    Let $\calP_\l$ be a patch with $h$ holes without any boundary vertices. The cohomology of the space $X_{\l+1, \l+1}$ is isomorphic to the cohomology of $X_{\l+1, \l+1}$
+\end{lemma}
+
+The roadmap could be something like this: 
+\begin{itemize}
+    \item introduce iterative re-interpretation of DoF selection so that we can do induction across levels
+    \item have a lemma for every case that could happen across one level (we need to focus on why things work for exact partitions, the other cases are only interesting as remarks to understand the modes of failure better.) The result shoul be Lemma~\ref{lemma:isomorphism_on_cohomology}.
+    \item do induction across all levels.
+\end{itemize}
+
+(We need to write this down in a basis-function centric way, right? Otherwise, we just add $X_{\l+1, \l+1}$.)
+
+\begin{lemma}
+    Given a subdivision partition, our selection algorithm can be re-cast as
+    \begin{itemize}
+        \item initialise as the uniform space at $\lzero$: $\hierSDFspace{k}{\C_\lzero}{L} = \SDFspace{k}{\lzero}{\L}$
+        \item for $\l \to \l+1$, $\hierSDFspace{k}{\C_{\l+1}}{L} = \hierSDFspace{k}{\C_\l}{L} + X_{\l+1, \l+1} - X_{\l,\l+1}$
+    \end{itemize}
+\end{lemma}
+
+We need a final theorem along the lines of this:
+\begin{theorem}
+    Let $\C$ be an exact subdivision partition. Then, the complex
+    \begin{equation}
+    \begin{tikzcd}
+        \mathfrak{R}_\C: \qquad 0 \arrow[r] & \hierSDFspace{0}{\C}{\L} \arrow[r, "\extd"] & \hierSDFspace{1}{\C}{\L} \arrow[r, "\extd"] & \hierSDFspace{2}{\C}{\L} \arrow[r, "\int"] & \mathbb{R} \arrow[r] & 0.
+    \end{tikzcd}
+    \end{equation}
+    is exact.
+\end{theorem}
+
 \bibliography{references}
 
 \end{document}
